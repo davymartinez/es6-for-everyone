@@ -106,3 +106,93 @@ From Kyle Simpson on an article that [no longer seems to be online](https://blog
 - Use `var` for top-level variables that are shared across many (especially larger) scopes.
 - Use `let` for localized variables in smaller scopes.
 - Refactor `let` to `const` only after some code has to be written, and you're reasonably sure that you've got a case where there shouldn't be variable reassignment.
+
+## Function Improvements: Arrows and Default Arguments
+
+### Arrow Functions Introduction
+
+Three key benefits of arrow functions:
+
+- They're more concise than regular functions
+- They have implicit returns, which allows for one-liners
+- They don't rebind the value of `this`, which is really useful when you embed an arrow function inside of another function
+
+#### Arrow function examples:
+
+```javascript
+const namesArray = ['Herman', 'Lily', 'Eddie', 'Grandpa', 'Marylin'];
+
+// regular function
+const fullNames = namesArray.map(function(name) {
+  return `${name} Munster`;
+});
+
+// arrow function
+const fullNames2 = namesArray.map((name) => {
+  return `${name} Munster`;
+});
+
+// arrow function without parenthesized argument
+const fullNames3 = namesArray.map(name => {
+  return `${name} Munster`;
+});
+
+// arrow function with implicit return
+const fullNames4 = namesArray.map(name => `${name} Munster`);
+
+// all of the above functions return the exact same array
+// [ "Herman Munster", "Lily Munster", "Eddie Munster", "Grandpa Munster", "Marylin Munster" ]
+
+// arrow function without argument
+// returns [ "The Munsters", "The Munsters", "The Munsters", "The Munsters", "The Munsters" ]
+
+const fullNames5 = namesArray.map(() => `The Munsters`);
+```
+
+Arrow functions are always anonymous, as opposed to named functions:
+
+```javascript
+// named function:
+function sayMyName(name) {
+  alert(`Hello ${name}`);
+}
+
+// arrow function:
+const sayMyName = name => alert(`Hello ${name}`);
+```
+
+### More Arrow Function Examples
+
+Example of implicit return to object literal:
+
+```javascript
+const race = '100m Dash';
+const winners = ['Java\'s Crypt','Zinga Son', 'Payne Diaz'];
+
+const win = winners.map((winner, i) => ({name: winner, race, place: i + 1}));
+
+// returns:
+[
+  {
+    name: 'Java\'s Crypt',
+    race: '100m Dash',
+    place: 1
+  },
+  {
+    name: 'Zinga Son',
+    race: '100m Dash',
+    place: 2
+  },
+  {
+    name: 'Payne Diaz',
+    race: '100m Dash',
+    place: 3
+  },
+]
+```
+
+### Arrow Functions and `this`
+
+Inside arrow functions `this` does not get rebound. It inherits the parent's scope. There are times when you need `this` to reference the scope of the function where it's being called -- in those cases, use regular functions.
+
+Do notice that in embedded functions, that is, a function inside another function, the embedded one can be an arrow function, since it will inherit the scope of `this`.
