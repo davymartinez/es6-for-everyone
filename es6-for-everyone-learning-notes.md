@@ -196,3 +196,37 @@ const win = winners.map((winner, i) => ({name: winner, race, place: i + 1}));
 Inside arrow functions `this` does not get rebound. It inherits the parent's scope. There are times when you need `this` to reference the scope of the function where it's being called -- in those cases, use regular functions.
 
 Do notice that in embedded functions, that is, a function inside another function, the embedded one can be an arrow function, since it will inherit the scope of `this`.
+
+### Default Function Arguments
+
+Default arguments let us declare values that will be used as a default if we don't pass any arguments to a function. For example:
+
+```javascript
+function calculateBill(total, tax=0.13, tip=0.15) {
+  return total + (total * tax) + (total * tip);
+}
+
+const totalBill = (100);
+
+// returns 128
+```
+
+In the above function, both `tax` and `tip` get default values of `0.13` and `0.15` respectively, whereas we're passing just `100`, which corresponds to `total`.
+
+Notice you can still pass other values to `tax` and `tip`, which will override the default values. You can also pass `undefined` to any one of the values if you're passing two other values, as in:
+
+```javascript
+const totalBill = (100, undefined, 0.10);
+
+// returns 110
+```
+
+### When NOT to Use an Arrow Function
+
+- **When you really need `this`**: see "Arrow Functions and `this`" above
+
+- **When you need a method to bind to an object**: that is, anytime you need to have a method declared inside an object
+
+- **When you need to add a prototype method**: that is, when you need to define a `constructor` method inside a `class`
+
+- **When you need arguments object**: for example, from an `Array.from(arguments)` call inside a function
