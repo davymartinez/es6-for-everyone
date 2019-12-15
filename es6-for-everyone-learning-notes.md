@@ -230,3 +230,115 @@ const totalBill = (100, undefined, 0.10);
 - **When you need to add a prototype method**: that is, when you need to define a `constructor` method inside a `class`
 
 - **When you need arguments object**: for example, from an `Array.from(arguments)` call inside a function
+
+## Template Strings
+
+Use backticks to create template literals, enclosing variables inside `${ }`. You can also evaluate expressions inside template literals:
+
+```javascript
+const name = 'Snickers';
+const age = 2;
+const sentence = `My dog ${name} is ${age * 7} years old.`
+console.log(sentence);
+// outputs: My dog Snickers is 14 yars old.
+```
+
+### Creating HTML Fragments with Template Literals
+
+Template literals are quite useful to create HTML fragments and assign them to variables:
+
+```javascript
+const person = {
+  name: 'David',
+  job: 'Music Metadata Senior Editor',
+  city: 'Buenos Aires',
+  bio: 'David is just a cool guy that loves music and got to work classifying it!'
+}
+
+const markup = `
+  <div class="person">
+    <h2>
+      ${person.name}
+      <span class="job">${person.job}</span>
+    </h2>
+    <p class="location">${person.city}</p>
+    <p class="bio">${person.bio}</p>
+  </div>
+`;
+
+document.body.innerHTML = markup;
+```
+
+You can also embed template literals inside other literals, for example, to create a list out of an array with elements, use a map function:
+
+```javascript
+const dogs = [
+  {name: 'Snickers', age: 2},
+  {name: 'Ugo', age: 8},
+  {name: 'Sonny', age: 1}
+];
+
+const markup = `
+  <ul class="dogs">
+    ${dogs.map(dog => `
+      <li>
+        ${dog.name} is ${dog.age} years old
+      </li>`).join('')}
+  </ul>
+`;
+
+document.body.innerHTML = markup;
+```
+
+You can also use ternary operators inside template literals for conditional rendering:
+
+```javascript
+const song = {
+  name: 'Dying to live',
+  artist: 'Tupac',
+  featuring: 'Biggie Smalls'
+};
+
+const markup = `
+  <div class="song">
+    <p>
+      ${song.name} - ${song.artist} ${song.featuring ? `(Feat. ${song.featuring})` : ''}
+    </p>
+  </div>
+`;
+
+// The above will only render the featured artists if there's one in the song object
+
+document.body.innerHTML = markup;
+```
+
+You can run functions inside template literals:
+
+```javascript
+const beer = {
+  name: 'Belgian Wit',
+  brewery: 'Steam Whistle Brewery',
+  keywords: ['pale', 'cloudy', 'spiced', 'crisp']
+}
+
+function renderKeywords(keywords) {
+  return `
+    <ul>
+      ${keywords.map(keyword => `<li>${keyword}</li>`).join('')}
+    </ul>
+  `
+}
+
+const markup = `
+  <div class="beer">
+    <h2>
+      ${beer.name}
+    </h2>
+    <p class="brewery">
+      ${beer.brewery}
+    </p>
+    ${renderKeywords(beer.keywords)}
+  </div>
+`
+document.body.innerHTML = markup;
+```
