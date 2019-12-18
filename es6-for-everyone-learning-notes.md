@@ -342,3 +342,29 @@ const markup = `
 `
 document.body.innerHTML = markup;
 ```
+
+### Tagged Template Literals
+
+Tagged template literals are basically *syntactic sugar* that allows us to parse, or break down, a template literal into several arguments: an array of the plain text, and then the template literal expressions in the same order than they appear. For example:
+
+```javascript
+<script>
+  // in the function below, 'strings' is the array of text
+  // ...values is the rest operator that takes in the rest of the arguments
+  function highlight(strings, ...values) {
+    let str = '';
+    // we loop through the array and concatenate the strings and values
+    strings.forEach((string, i) => {
+      str =+ `${string} <span class="hl">${values[i] || ''}</span>`;
+    });
+    return str;
+  }
+
+  const name = 'Snickers';
+  const age = 100;
+
+  // here comes the tagged template literal:
+  const sentence = highlight`My dog's name is ${name} and he is ${age} years old.`;
+  document.body.innerHTML = sentence;
+</script>
+```
