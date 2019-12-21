@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Tagged Template Literals</title>
+</head>
+
+<body>
+  <div class="bio">
+
+  </div>
+  <script>
+    const dict = {
+      HTML: 'Hyper-Text Markup Language',
+      CSS:  'Cascading Style Sheets',
+      JS:   'JavaScript'
+    };
+
+    function showAbbr(strings, ...values) {
+      // work with a map() then a reduce()
+      const abbrVal = values.map(
+        value => dict[value] ?
+          `<abbr title="${dict[value]}">${value}</abbr>` :
+          value
+      );
+      return strings.reduce(
+        (sentence, string, i) => `${sentence}${string}${abbrVal[i] || ''}`
+      );
+    }
+
+    const firstName = 'David';
+    const lastName = 'Martinez';
+    const sentence = showAbbr`Hello, my name is ${firstName} ${lastName} and I love to code ${'HTML'}, ${'CSS'}, and ${'JS'}`;
+    const bio = document.querySelector('.bio');
+    const p = document.createElement('p');
+    p.innerHTML = sentence;
+    bio.appendChild(p);
+  </script>
+</body>
+</html>
