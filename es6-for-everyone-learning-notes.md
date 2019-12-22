@@ -368,3 +368,28 @@ Tagged template literals are basically *syntactic sugar* that allows us to parse
   document.body.innerHTML = sentence;
 </script>
 ```
+### Sanitizing User Data with Tagged Templates
+
+Tagged template literals can be useful in sanitizing HTML, that is, cleaning any potentially malicious HTML input code in order to prevent XSS attacks.
+
+[DOMPurify](https://github.com/cure53/DOMPurify) is a library that can be used for this purpose. For example:
+
+```javascript
+...
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/0.8.2/purify.min.js"></script>
+<script>
+  function sanitize(strings, ...values) {
+    const dirty = strings.reduce((prev, next, i) => `${prev}${next}${values[i] || ''}`, '');
+    return DOMPurify.sanitize(dirty);
+  }
+
+  const first = 'David';
+  const aboutMe = `I love to do evil <img src="http://unsplash.it/100/100?random" onload="alert('you got hacked');" />`;
+  const html = sanitize`<h3>${first}</h3><p>${aboutMe}</p>`;
+
+  const bio = document.querySelector('.bio');
+  bio.innerHTML = html;
+</script>
+```
+
+What we're doing here is tagging the `sanitize()` function to the `html` variable, which contains potentially malicious code. The function, in turn, runs everything through a reducer and feeds the `sanitize()` function from DOMPurify.

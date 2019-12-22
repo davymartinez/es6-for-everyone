@@ -18,15 +18,18 @@
     };
 
     function showAbbr(strings, ...values) {
-      // work with a map() then a reduce()
+      // map the expressions (...values) thru a ternary operation
+      // look if the corresponding value exists in the dict object
       const abbrVal = values.map(
         value => dict[value] ?
+          // if it exists append it inside the template literal
           `<abbr title="${dict[value]}">${value}</abbr>` :
+          // else return just the value
           value
       );
-      return strings.reduce(
-        (sentence, string, i) => `${sentence}${string}${abbrVal[i] || ''}`
-      );
+      return strings.reduce((sentence, string, i) => {
+        return `${sentence}${string}${abbrVal[i] || ''}`
+      }, '');
     }
 
     const firstName = 'David';
