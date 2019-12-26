@@ -199,7 +199,7 @@ Do notice that in embedded functions, that is, a function inside another functio
 
 ### Default Function Arguments
 
-Default arguments let us declare values that will be used as a default if we don't pass any arguments to a function. For example:
+Default arguments let you declare values that will be used as a default if you don't pass any arguments to a function. For example:
 
 ```javascript
 function calculateBill(total, tax=0.13, tip=0.15) {
@@ -211,7 +211,7 @@ const totalBill = (100);
 // returns 128
 ```
 
-In the above function, both `tax` and `tip` get default values of `0.13` and `0.15` respectively, whereas we're passing just `100`, which corresponds to `total`.
+In the above function, both `tax` and `tip` get default values of `0.13` and `0.15` respectively, whereas you're passing just `100`, which corresponds to `total`.
 
 Notice you can still pass other values to `tax` and `tip`, which will override the default values. You can also pass `undefined` to any one of the values if you're passing two other values, as in:
 
@@ -368,6 +368,7 @@ Tagged template literals are basically *syntactic sugar* that allows us to parse
   document.body.innerHTML = sentence;
 </script>
 ```
+
 ### Sanitizing User Data with Tagged Templates
 
 Tagged template literals can be useful in sanitizing HTML, that is, cleaning any potentially malicious HTML input code in order to prevent XSS attacks.
@@ -392,4 +393,117 @@ Tagged template literals can be useful in sanitizing HTML, that is, cleaning any
 </script>
 ```
 
-What we're doing here is tagging the `sanitize()` function to the `html` variable, which contains potentially malicious code. The function, in turn, runs everything through a reducer and feeds the `sanitize()` function from DOMPurify.
+What you're doing here is tagging the `sanitize()` function to the `html` variable, which contains potentially malicious code. The function, in turn, runs everything through a reducer and feeds the `sanitize()` function from DOMPurify.
+
+## Additional String Improvements
+
+### New String Methods
+
+Some new useful ES6 string methods include:
+
+- `.startsWith()`: determines whether a string begins with the characters of a specified string, returns true or false.
+
+- `.endsWith()`: determines whether a string ends with the characters of a specified string, returns true or false.
+
+- `.includes()`: determines whether one string may be found within another string, returns true or false.
+
+- `.repeat()`: constructs and returns a new string which contains the specified number of copies of the string on which it was called, concatenated together.
+
+## Destructuring
+
+Destructuring allows you to "unpack" values from an object or an array and assign these values to new variables:
+
+### Destructuring Objects
+
+Take this object, for example:
+
+```javascript
+const person = {
+  firstName: 'David',
+  lastName: 'Martinez',
+  country: 'Argentina',
+  city: 'Buenos Aires',
+  twitter: '@OnlyApo'
+}
+```
+
+Now you can destructure it, unpacking certain keys from it and assigning them to new variable, as follows:
+
+```javascript
+const { firstName, lastName, twitter } = person;
+
+console.log(firstName); // 'David'
+console.log(lastName);  // 'Martinez'
+console.log(twitter);   // '@OnlyApo'
+```
+
+A way to look at this is as if you're saying: "give me a variable called `firstName`, another called `lastName`, and another called `twitter`, and take them from the `person` object."
+
+You can also reach into nested values, like this:
+
+```javascript
+const person = {
+  firstName: 'David',
+  lastName: 'Martinez',
+  links: {
+    social: {
+      twitter: 'https://twitter.com/OnlyApo',
+      linkedIn: 'https://linkedin.com/in/davidmartinezgarcia'
+    },
+    web: {
+      blog: 'https://davymartinez.com/posts'
+    }
+  }
+}
+
+const { twitter, linkedIn } = person.links.social;
+```
+
+You can also rename these variables when assigning them, like this:
+
+```javascript
+const { twitter: twtr, linkedIn: li } = person.links.social;
+```
+
+(Not that the above are great variable names, though, but they illustrate the point...)
+
+Destructured assignments can also receive new variables, not originally included as keys in the object, with default values:
+
+```javascript
+const settings = { width: 300, color: 'black' };
+
+const { width = 100, height = 100, color = 'blue', fontSize = 18 };
+```
+
+In the above example, neither `height` nor `fontSize` are destructured from the `settings` object, but they're declared anyway and given default values, so they won't be undefined. Note that both `width` and `color` get default values, but if you call them, they will give theh values from the object (`300` and `'black'`, resp.)
+
+All of this can be combined as the following example of object destructuring with variable renaming and default values shows:
+
+```javascript
+const { w: width = 400, h: height = 500 } = { w: 800 };
+```
+
+What's happening here is that you're taking an object which originally only included a `w: 800` key-value pair, destructured into a new one with two variables, `width` and `height`, both of which have default values, and the first of them being additionally renamed from `w` to `width`.
+
+### Destructuring Arrays
+
+In order to destructure arrays, you proceed in the same way as with objects, but using, of course, square brackets (`[]`) instead of curly braces (`{}`):
+
+```javascript
+const details = ['David Martinez', 123, 'davymartinez.com'];
+const [ name, id, website ] = details;
+```
+
+You can also create an array out of a string list and destructure it with the `.split()` method:
+
+```javascript
+const data = 'Baseball,Sports,90210,23';
+const [ itemName, category, sku, inventory ] = data.split(',');
+```
+
+Use the rest operator with array destructuring as follows:
+
+```javascript
+const team = ['David', 'Ernst', 'Felicity', 'Gus', 'Harriet'];
+const [captain, assistant, ...players] = team;
+```
