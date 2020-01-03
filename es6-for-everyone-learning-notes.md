@@ -30,9 +30,9 @@ if (points > 40) {
 }
 ```
 
-If you `console.log(winner)` it will still output `false`, as the `winner` variable you're logging to console is the one outside the `if` block. The one inside the block remains `true`, but won't be logged to console unless you include the `console.log(winner)` statement inside the `if` block.
+If we `console.log(winner)` it will still output `false`, as the `winner` variable we're logging to console is the one outside the `if` block. The one inside the block remains `true`, but won't be logged to console unless we include the `console.log(winner)` statement inside the `if` block.
 
-Of course, you can change the value of a `let`, as in:
+Of course, we can change the value of a `let`, as in:
 
 ```javascript
 let points = 50;
@@ -48,7 +48,7 @@ let points = 60;
 // throws SyntaxError: redeclaration of let points
 ```
 
-In the case of `const` you cannot either reassign it nor redeclare it, it is a *constant* for all purposes:
+In the case of `const` we cannot either reassign it nor redeclare it, it is a *constant* for all purposes:
 
 ```javascript
 const name = 'David';
@@ -68,7 +68,7 @@ const person = {
 person.age = 43;
 ```
 
-What you cannot do is reassign the whole object to a different thing as in:
+What we cannot do is reassign the whole object to a different thing as in:
 
 ```javascript
 const person = {
@@ -105,7 +105,7 @@ From Kyle Simpson on an article that [no longer seems to be online](https://blog
 
 - Use `var` for top-level variables that are shared across many (especially larger) scopes.
 - Use `let` for localized variables in smaller scopes.
-- Refactor `let` to `const` only after some code has to be written, and you're reasonably sure that you've got a case where there shouldn't be variable reassignment.
+- Refactor `let` to `const` only after some code has to be written, and we're reasonably sure that we've got a case where there shouldn't be variable reassignment.
 
 ## Function Improvements: Arrows and Default Arguments
 
@@ -115,7 +115,7 @@ Three key benefits of arrow functions:
 
 - They're more concise than regular functions
 - They have implicit returns, which allows for one-liners
-- They don't rebind the value of `this`, which is really useful when you embed an arrow function inside of another function
+- They don't rebind the value of `this`, which is really useful when we embed an arrow function inside of another function
 
 #### Arrow function examples:
 
@@ -193,13 +193,13 @@ const win = winners.map((winner, i) => ({name: winner, race, place: i + 1}));
 
 ### Arrow Functions and `this`
 
-Inside arrow functions `this` does not get rebound. It inherits the parent's scope. There are times when you need `this` to reference the scope of the function where it's being called -- in those cases, use regular functions.
+Inside arrow functions `this` does not get rebound. It inherits the parent's scope. There are times when we need `this` to reference the scope of the function where it's being called -- in those cases, use regular functions.
 
 Do notice that in embedded functions, that is, a function inside another function, the embedded one can be an arrow function, since it will inherit the scope of `this`.
 
 ### Default Function Arguments
 
-Default arguments let you declare values that will be used as a default if you don't pass any arguments to a function. For example:
+Default arguments let us declare values that will be used as a default if we don't pass any arguments to a function. For example:
 
 ```javascript
 function calculateBill(total, tax=0.13, tip=0.15) {
@@ -211,9 +211,9 @@ const totalBill = (100);
 // returns 128
 ```
 
-In the above function, both `tax` and `tip` get default values of `0.13` and `0.15` respectively, whereas you're passing just `100`, which corresponds to `total`.
+In the above function, both `tax` and `tip` get default values of `0.13` and `0.15` respectively, whereas we're passing just `100`, which corresponds to `total`.
 
-Notice you can still pass other values to `tax` and `tip`, which will override the default values. You can also pass `undefined` to any one of the values if you're passing two other values, as in:
+Notice we can still pass other values to `tax` and `tip`, which will override the default values. We can also pass `undefined` to any one of the values if we're passing two other values, as in:
 
 ```javascript
 const totalBill = (100, undefined, 0.10);
@@ -223,17 +223,17 @@ const totalBill = (100, undefined, 0.10);
 
 ### When NOT to Use an Arrow Function
 
-- **When you really need `this`**: see "Arrow Functions and `this`" above
+- **When we really need `this`**: see "Arrow Functions and `this`" above
 
-- **When you need a method to bind to an object**: that is, anytime you need to have a method declared inside an object
+- **When we need a method to bind to an object**: that is, anytime we need to have a method declared inside an object
 
-- **When you need to add a prototype method**: that is, when you need to define a `constructor` method inside a `class`
+- **When we need to add a prototype method**: that is, when we need to define a `constructor` method inside a `class`
 
-- **When you need arguments object**: for example, from an `Array.from(arguments)` call inside a function
+- **When we need arguments object**: for example, from an `Array.from(arguments)` call inside a function
 
 ## Template Strings
 
-Use backticks to create template literals, enclosing variables inside `${ }`. You can also evaluate expressions inside template literals:
+Use backticks to create template literals, enclosing variables inside `${ }`. We can also evaluate expressions inside template literals:
 
 ```javascript
 const name = 'Snickers';
@@ -269,7 +269,7 @@ const markup = `
 document.body.innerHTML = markup;
 ```
 
-You can also embed template literals inside other literals, for example, to create a list out of an array with elements, use a map function:
+We can also embed template literals inside other literals, for example, to create a list out of an array with elements, use a map function:
 
 ```javascript
 const dogs = [
@@ -290,7 +290,7 @@ const markup = `
 document.body.innerHTML = markup;
 ```
 
-You can also use ternary operators inside template literals for conditional rendering:
+We can also use ternary operators inside template literals for conditional rendering:
 
 ```javascript
 const song = {
@@ -312,7 +312,7 @@ const markup = `
 document.body.innerHTML = markup;
 ```
 
-You can run functions inside template literals:
+We can run functions inside template literals:
 
 ```javascript
 const beer = {
@@ -393,7 +393,7 @@ Tagged template literals can be useful in sanitizing HTML, that is, cleaning any
 </script>
 ```
 
-What you're doing here is tagging the `sanitize()` function to the `html` variable, which contains potentially malicious code. The function, in turn, runs everything through a reducer and feeds the `sanitize()` function from DOMPurify.
+What we're doing here is tagging the `sanitize()` function to the `html` variable, which contains potentially malicious code. The function, in turn, runs everything through a reducer and feeds the `sanitize()` function from DOMPurify.
 
 ## Additional String Improvements
 
@@ -411,7 +411,7 @@ Some new useful ES6 string methods include:
 
 ## Destructuring
 
-Destructuring allows you to "unpack" values from an object or an array and assign these values to new variables:
+Destructuring allows us to "unpack" values from an object or an array and assign these values to new variables:
 
 ### Destructuring Objects
 
@@ -427,7 +427,7 @@ const person = {
 }
 ```
 
-Now you can destructure it, unpacking certain keys from it and assigning them to new variable, as follows:
+Now we can destructure it, unpacking certain keys from it and assigning them to new variable, as follows:
 
 ```javascript
 const { firstName, lastName, twitter } = person;
@@ -437,9 +437,9 @@ console.log(lastName);  // 'Martinez'
 console.log(twitter);   // '@OnlyApo'
 ```
 
-A way to look at this is as if you're saying: "give me a variable called `firstName`, another called `lastName`, and another called `twitter`, and take them from the `person` object."
+A way to look at this is as if we're saying: "give me a variable called `firstName`, another called `lastName`, and another called `twitter`, and take them from the `person` object."
 
-You can also reach into nested values, like this:
+We can also reach into nested values, like this:
 
 ```javascript
 const person = {
@@ -459,7 +459,7 @@ const person = {
 const { twitter, linkedIn } = person.links.social;
 ```
 
-You can also rename these variables when assigning them, like this:
+We can also rename these variables when assigning them, like this:
 
 ```javascript
 const { twitter: twtr, linkedIn: li } = person.links.social;
@@ -475,7 +475,7 @@ const settings = { width: 300, color: 'black' };
 const { width = 100, height = 100, color = 'blue', fontSize = 18 };
 ```
 
-In the above example, neither `height` nor `fontSize` are destructured from the `settings` object, but they're declared anyway and given default values, so they won't be undefined. Note that both `width` and `color` get default values, but if you call them, they will give theh values from the object (`300` and `'black'`, resp.)
+In the above example, neither `height` nor `fontSize` are destructured from the `settings` object, but they're declared anyway and given default values, so they won't be undefined. Note that both `width` and `color` get default values, but if we call them, they will give theh values from the object (`300` and `'black'`, resp.)
 
 All of this can be combined as the following example of object destructuring with variable renaming and default values shows:
 
@@ -483,18 +483,18 @@ All of this can be combined as the following example of object destructuring wit
 const { w: width = 400, h: height = 500 } = { w: 800 };
 ```
 
-What's happening here is that you're taking an object which originally only included a `w: 800` key-value pair, destructured into a new one with two variables, `width` and `height`, both of which have default values, and the first of them being additionally renamed from `w` to `width`.
+What's happening here is that we're taking an object which originally only included a `w: 800` key-value pair, destructured into a new one with two variables, `width` and `height`, both of which have default values, and the first of them being additionally renamed from `w` to `width`.
 
 ### Destructuring Arrays
 
-In order to destructure arrays, you proceed in the same way as with objects, but using, of course, square brackets (`[]`) instead of curly braces (`{}`):
+In order to destructure arrays, we proceed in the same way as with objects, but using, of course, square brackets (`[]`) instead of curly braces (`{}`):
 
 ```javascript
 const details = ['David Martinez', 123, 'davymartinez.com'];
 const [ name, id, website ] = details;
 ```
 
-You can also create an array out of a string list and destructure it with the `.split()` method:
+We can also create an array out of a string list and destructure it with the `.split()` method:
 
 ```javascript
 const data = 'Baseball,Sports,90210,23';
@@ -506,4 +506,73 @@ Use the rest operator with array destructuring as follows:
 ```javascript
 const team = ['David', 'Ernst', 'Felicity', 'Gus', 'Harriet'];
 const [captain, assistant, ...players] = team;
+```
+
+### Swapping Variables with Destructuring Arrays
+
+Array destructuring lets us swap variable values without using the old 'temp' variable trick. That is, instead of using something like this:
+
+```javascript
+let inRing = 'Hulk Hogan';
+let onSide = 'The Rock';
+let tmp = '';
+
+tmp = inRing;
+inRing = onSide;
+onSide = tmp;
+```
+
+We can use destructured arrays like so:
+
+```javascript
+let inRing = 'Hulk Hogan';
+let onSide = 'The Rock';
+
+[inRing, onSide] = [onSide, inRing];
+```
+
+### Destructuring Functions - Multiple returns and named defaults
+
+With destructuring you can easily return individual values from inside an object nested inside a function:
+
+```javascript
+function convertCurrency(amount) {
+  const converted = {
+    USD: amount * 0.76,
+    GBP: amount * 0.53,
+    AUD: amount * 1.01,
+    MEX: amount * 13.30
+  };
+  return converted;
+}
+
+const { USD, GBP, AUD, MEX } = convertCurrency(amount)
+```
+
+As for named defaults, with destructured objects we can make function parameters "order independent", that is, we no longer need to remember/know the exact order of the variables that make up such function parameters. This is achieved by making the function parameters an object, basically by wrapping the parameters inside curly braces.
+
+To illustrate this, consider a tip calculator function:
+
+```javascript
+function tipCalc({ total, tip = 0.15, tax = 0.13 }) {
+  return total + (tip * total) + (tax * total);
+}
+
+const bill = tipCalc({ tip: 0.20, total: 200 });
+```
+
+In the above example, when we skip `tax` it would still refer to the default `tax=0.13` value. We could even shuffle the values and `bill` would still work as intended, because the parameter is a destructured object:
+
+```javascript
+const bill = tipCalc({ total: 200, tip: 0.20 });
+```
+
+We could also just call `tipCalc()`, with no arguments, if all its values are default. However, we first have to also pass a default empty object so that it won't return `undefined`:
+
+```javascript
+function tipCalc({ total = 100, tip = 0.15, tax = 0.13 } = {}) {
+  return total + (tip * total) + (tax * total);
+}
+
+const bill = tipCalc();
 ```
