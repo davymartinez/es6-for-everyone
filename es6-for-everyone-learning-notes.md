@@ -576,3 +576,102 @@ function tipCalc({ total = 100, tip = 0.15, tax = 0.13 } = {}) {
 
 const bill = tipCalc();
 ```
+
+## Iterables and Looping
+
+### The for...of Loop
+
+The `for...of` loop is a useful statement for looping through iterables (anything that can be looped over: arrays, strings, maps, sets, generators).
+
+It solves the following shortcomings of other looping statements:
+
+- The standard `for` loop syntax can be confusing
+- The `for each` loop cannot be aborted/resumed with `break`/`continue`
+- The `for...in` loop returns enumerable properties, which might not be what we need
+
+### The for...of loop in Action
+
+With a `for...of` loop alone it is not possible to get the indexes of an array. However, we can still access those by using the `entries()` iterator:
+
+```javascript
+const cuts = ['Chuck', 'Brisket', 'Shank', 'Short Rib'];
+
+for (const cut of cuts.entries()) {
+  console.log(cut);
+}
+
+// Output:
+// [ 0, 'Chuck' ]
+// [ 1, 'Brisket' ]
+// [ 2, 'Shank' ]
+// [ 3, 'Short Rib' ]
+```
+
+We can also access both the index and the entry as independent variables by destructuring them:
+
+```javascript
+const cuts = ['Chuck', 'Brisket', 'Shank', 'Short Rib'];
+
+for (const [i, cut] of cuts.entries()) {
+  console.log(`${cut} is the ${i + 1} item`);
+}
+
+// Output:
+// Chuck is the 1 item
+// Brisket is the 2 item
+// Shank is the 3 item
+// Short Rib is the 4 item
+```
+
+`for...of` can also loop through an `arguments` iterator:
+
+```javascript
+function addUpNumbers() {
+  let total = 0;
+  for (const num of arguments) {
+    total =+ num;
+  }
+  return total;
+}
+
+addUpNumbers(10, 23, 52, 34, 12, 13, 123);
+// returns 267
+```
+
+### Using for...of with Objects
+
+As of ES 2016, `for...of` is still not suitable for looping through objects, as these are not iterable (ES 2017 introduced `Object.entries()`). We can, however, we can use `Object.keys()`, which returns an array with the object's keys. We can also use a `for...in` to the same effect of extracting keys and values from an object.
+
+Thus, with `for...of`:
+
+```javascript
+const apple = {
+  color: 'Red',
+  size: 'Medium',
+  weight: 50,
+  sugar: 10
+}
+
+for (const prop of Object.keys(apple)) {
+  const value = apple[prop];
+  console.log(`${prop}: ${value}`)
+}
+```
+
+With `for...in`:
+
+with `for...of`:
+
+```javascript
+const apple = {
+  color: 'Red',
+  size: 'Medium',
+  weight: 50,
+  sugar: 10
+}
+
+for (const prop in apple) {
+  const value = apple[prop];
+  console.log(`${prop}: ${value}`)
+}
+```
