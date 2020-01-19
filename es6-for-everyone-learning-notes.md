@@ -675,3 +675,128 @@ for (const prop in apple) {
   console.log(`${prop}: ${value}`)
 }
 ```
+
+## An Array of Array Improvements
+
+### Array.from() and Array.of()
+
+`Array.from()` lets us create arrays from array-like or iterable objects.
+
+Working with DOM elements provides opportunities to use `Array.from()`. For example:
+
+```html
+<div class="people">
+  <p>Geddy</p>
+  <p>Alex</p>
+  <p>Neil</p>
+</div>
+<script>
+  const people = Array.from(document.querySelectorAll('.people p'));
+  const names = people.map(person => person.textContent);
+</script>
+
+<!--Output: ["Geddy", "Alex", "Neil"] ->
+```
+
+An alternative one-line declaration of the above script would be:
+
+```javascript
+const people = document.querySelectorAll('.people p');
+const names = Array.from(people, person => { return person.textContent } );
+```
+
+We can also create arrays from an `arguments` iterator, like this:
+
+```javascript
+function sumAll() {
+  const nums = Array.from(arguments);
+  return nums.reduce((prev, next) => prev + next, 0);
+}
+sumAll(2, 23, 234, 2345, 23456, 65432, 5432, 432, 32, 2);
+// returns 97390
+```
+
+As for `Array.of()` it simply creates an array from a list of arguments:
+
+```javascript
+const ages = Array.of(42, 41, 13, 8);
+console.log(ages);
+// outputs [42, 41, 13, 8];
+```
+
+### Array.find() and .findIndex()
+
+ The `Array.find()` callback method is useful to find particular values inside an array (easier to use than regexes). Suppose we have an array of objects like the one below:
+
+ ```javascript
+const posts = [
+  {
+    "code":"BAcyDyQwcXX",
+    "caption":"Lunch #hamont",
+    "likes":56,
+    "id":"1161022966406956503",
+    "display_src":"https://scontent.cdninstagram.com/hphotos-xap1/t51.2885-15/e35/12552326_495932673919321_1443393332_n.jpg"
+  },
+  {
+    "code":"BAcJeJrQca9",
+    "caption":"Snow! ⛄️🌨❄️ #lifewithsnickers",
+    "likes":59,
+    "id":"1160844458347054781",
+    "display_src":"https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-15/e35/12407344_1283694208323785_735653395_n.jpg"
+  },
+  {
+    "code":"BAF_KY4wcRY",
+    "caption":"Cleaned my office and mounted my recording gear overhead. Stoked for 2016!",
+    "likes":79,
+    "id":"1154606670337393752",
+    "display_src":"https://scontent.cdninstagram.com/hphotos-xpf1/t51.2885-15/e35/923995_1704188643150533_1383710275_n.jpg"
+  }
+];
+```
+
+And we want to find a particular `code` in there, say `BAcJeJrQca9`. With `.find()`, we just do the following:
+
+```javascript
+const code = 'BAcJeJrQca9';
+const post = posts.find(post => post.code === code);
+console.log(post);
+// logs:
+// {
+//     "code":"BAcJeJrQca9",
+//     "caption":"Snow! ⛄️🌨❄️ #lifewithsnickers",
+//     "likes":59,
+//     "id":"1160844458347054781",
+//     "display_src":"https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-15/e35/12407344_1283694208323785_735653395_n.jpg"
+//   },
+```
+
+Whereas `.findIndex()`, as it name implies, returns the index:
+
+```javascript
+const code = 'BAcJeJrQca9';
+const post = posts.findIndex(post => post.code === code);
+console.log(post);
+// returns 1
+```
+
+### Array.some() and .every()
+
+The `Array.some()` method checks if at least one item in a given array passes a condition, returning `true`. If no item passes it, it returns `false`:
+
+```javascript
+const ages = [32, 15, 19, 21];
+
+// is there at least one adult in the group?
+const adultPresent = ages.some(age => age >= 18);
+console.log(adultPresent);
+// returns true
+```
+
+On the other hand, `Array.every()` only returns `true` if every item passes the given condition:
+
+```javascript
+// is everyone old enough to drink?
+const allOldEnough = ages.every(age => age >= 18);
+console.log(allOldEnough);
+// returns false
+```
