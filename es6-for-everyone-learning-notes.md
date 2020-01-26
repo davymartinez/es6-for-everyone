@@ -800,3 +800,20 @@ const allOldEnough = ages.every(age => age >= 18);
 console.log(allOldEnough);
 // returns false
 ```
+
+## Say Hello to ...Spread and ...Rest
+
+### Spread Operator Introduction
+
+The spread operator lets us expand iterables. Easier with an example:
+
+```javascript
+const featured = ['Deep Dish', 'Peperoni', 'Hawaiian'];
+const specialty = ['Meatzza', 'Spicy Mama', 'Margherita'];
+// using spread:
+const pizzas = [...featured, ...specialty];
+console.log(pizzas);
+// outputs ['Deep Dish', 'Peperoni', 'Hawaiian', 'Meatzza', 'Spicy Mama', 'Margherita']
+```
+
+The above example is an alternative to `.concat()`.
