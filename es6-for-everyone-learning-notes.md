@@ -817,3 +817,58 @@ console.log(pizzas);
 ```
 
 The above example is an alternative to `.concat()`.
+
+### More Spread Examples
+
+We can use the spread operator as an alternative to `Array.from()`. Consider the following HTML snippet:
+
+```html
+<div class="people">
+  <p>Lee</p>
+  <p>Lifeson</p>
+  <p>Peart</p>
+</div>
+```
+
+We can then spread a `.querySelectorAll` node list into an array, like so:
+
+```javascript
+const people = [...document.querySelectorAll('.people')];
+const lastNames = people.map(person => person.textContent);
+// logs ["Lee", "Lifeson", "Peart"]
+```
+
+Do notice, though, that `Array.from()` might be often times more readable.
+
+We can also deep-copy an array and paste it into another one:
+
+```javascript
+const deepDish = {
+  pizzaName: 'Deep Dish',
+  size: 'Medium',
+  ingredients: ['Marinara', 'Italian Sausage', 'Dough', 'Cheese']
+};
+// lets add the ingredients' array into a new one:
+const shoppingList = ['Milk', 'Flour', ...deepDish.ingredients];
+// logs ['Milk', 'Flour', 'Marinara', 'Italian Sausage', 'Dough', 'Cheese']
+```
+
+The spread operator in conjunction with `.slice()` is also useful to "prune" entries from an array of objects.
+
+Suppose we have the following array of comment objects and we want to delete a mean one:
+
+```javascript
+const comments = [
+  {id: 209384, text: 'I love your dog!'},
+  {id: 523423, text: 'Cuuute!'},
+  {id: 632429, text: 'You are so dumb'},
+  {id: 192834, text: 'Nice work on this!'}
+];
+// the offending comment is:
+const id = 632429;
+// we want to find its id:
+const commentIndex = comments.findIndex(comment => comment.id === id);
+// we slice and spread the returning arrays into a new array
+// (if we don't spread them, this will become an array of arrays, and not an array of objects)
+const newComments = [...comments.slice(0, commentIndex), ...comment.slice(commentIndex + 1)];
+```
