@@ -872,3 +872,60 @@ const commentIndex = comments.findIndex(comment => comment.id === id);
 // (if we don't spread them, this will become an array of arrays, and not an array of objects)
 const newComments = [...comments.slice(0, commentIndex), ...comment.slice(commentIndex + 1)];
 ```
+
+### Spreading into a Function
+
+If we push an array into another array, the one we're pushing gets "embedded" as sub-array into the other one:
+
+```javascript
+const inventors = ['Einstein', 'Newton', 'Galileo'];
+const newInventors = ['Musk', 'Jobs'];
+inventors.push(newInventors);
+console.log(inventors);
+// outputs: ['Einstein', 'Newton', 'Galileo', ['Musk', 'Jobs']]
+```
+
+However, by using spread we get an extended, flattened array:
+
+```javascript
+const inventors = ['Einstein', 'Newton', 'Galileo'];
+const newInventors = ['Musk', 'Jobs'];
+inventors.push(...newInventors);
+console.log(inventors);
+// outputs: ['Einstein', 'Newton', 'Galileo', 'Musk', 'Jobs']
+```
+
+Similarly, we can spread array values into a function, like this:
+
+```javascript
+const name = ['David', 'Martinez'];
+
+function sayHi(first, last) {
+  alert(`Hi there, ${first} ${last}`);
+}
+
+sayHi(...name);
+//alerts 'Hi there, David Martinez'
+```
+
+### The ...rest Param in Functions and Destructuring
+
+The `...rest` parameters syntax works in the opposite fashion to the `...spread` operator: it literally allows us to take the rest of the parameters in a function call and pack them into an array.
+
+The following function takes a given exchange rate (the first parameter) and applies it to the rest of the parameters, which are different amounts of a currency:
+
+```javascript
+function convertCurrency(rate, ...amounts) {
+  return amounts.map(amount => amount * rate);
+}
+
+const amounts = convertCurrency(1.54, 10, 23, 52, 1, 56);
+// returns [15.4, 35.42, 80.08, 1.54, 82.24000000000001]
+```
+
+We can also use rest parameters for destructuring arrays. In the example below, we assing `name` to  `'David'`, `id` to `123` and the rest of the values are assigned to `...runs`:
+
+```javascript
+const runner = ['David', 123, 5.5, 5, 4, 6, 35];
+const [name, id, ...runs] = runner;
+```
