@@ -929,3 +929,268 @@ We can also use rest parameters for destructuring arrays. In the example below, 
 const runner = ['David', 123, 5.5, 5, 4, 6, 35];
 const [name, id, ...runs] = runner;
 ```
+
+## Object Literal Upgrades
+
+### Object Literal Upgrades
+
+In ES6 we can declare object keys without a value if they are the same as variables declared alongside the object. An example makes it, hopefully, clearer.
+
+Suppose we have the following `const` declarations:
+
+```javascript
+const first = 'Bully';
+const last = 'Martinez';
+const age = 2;
+const breed = 'Bull Terrier';
+```
+
+Next, we'll declare an object that contains the keys that are the same as the above `const`'s:
+
+```javascript
+const dog = {
+  first: first,
+  last: last,
+  age: age,
+  breed: breed
+}
+```
+
+We can avoid all this repetition by just declaring the keys:
+
+```javascript
+const dog = {
+  first,
+  last,
+  age,
+  breed
+}
+```
+
+And it will work all the same.
+
+We can, of course, add different keys with their corresponding values, but as long as there are keys named the same as other variables outside the object, they will work OK:
+
+```javascript
+const dog = {
+  firstName: first,
+  last,
+  age,
+  breed,
+  pals: ['T-Bone', 'Linda']
+}
+```
+
+Regardind method definitions inside an object, we can use a shorthand for functions, like this:
+
+```javascript
+const modal = {
+  create(selector) {
+    // method
+  },
+  open(content) {
+    // method
+  },
+  close(file) {
+    // method
+  },
+}
+```
+
+Notice that the functions above could have been defined as `create = function(selector){//}`.
+
+## Promises
+
+### Promises
+
+A good way to visualize the concept of a Promise in JavaScript is "something that will probably happen in the future, but just not immediately."
+
+The [formal Promise definition from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) is:
+
+> A **Promise** is a proxy for a value not necessarily known when the promise is created. It allows you to associate handlers with an asynchronous action's eventual success value or failure reason. This lets asynchronous methods return values like synchronous methods: instead of immediately returning the final value, the asynchronous method returns a promise to supply the value at some point in the future.
+
+A common use for Promises is to fetch data from APIs, normally in JSON format. They use the .fetch() and .then() methods to accomplish this. For example, the following code fetches data from a URL, formats it into JSON and logs it to console, while at the same time catching any possible errors:
+
+```javascript
+const postsPromise = fetch('https://wesbos.com/wp-json/wp/v2/posts');
+
+postsPromise
+  .then(data => data.json())
+  .then(data => {
+    console.log(data);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+```
+
+### Building your own Promises
+
+We can use the Promise constructor to create our own promises, like this:
+
+```javascript
+const p = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('Dave is cool');
+  }, 1000);
+});
+
+p.then(data => {
+  console.log(data);
+})
+```
+
+The above code resolves the promise after 1000ms (1s) and console logs the `'Dave is cool'` text. Not too useful in practice but helps illustrate the point of how to declare a `new Promise()`.
+
+The same code from above can be slightly refactored to throw an error, by rejecting instead of resolving:
+
+```javascript
+const p = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject(Error('Dave isn\'t cool'));
+  }, 1000);
+});
+
+p
+  .then(data => {
+    console.log(data);
+  })
+  .catch(err => {
+    console.error(err);
+  });
+```
+
+### Chaining Promises and Flow Control
+
+Querying a database via NodeJS is a common use case for chaining promises. In the example below we have two arrays of objects simulating two tables of a database. First we declare a function that finds a given post by its id, and then chain it to another function that "embeds" the author's data from the `authors` array into the post entry, a process called "hydration". We achieve this with promises:
+
+```javascript
+const posts = [
+  {title: 'I love JavaScript', author: 'Wes Bos', id: 1},
+  {title: 'CSS!', author: 'Chris Coyier', id: 2},
+  {title: 'Dev Tools Tricks', author: 'Addy Osmani', id:3}
+];
+
+const authors = [
+  {name: 'Wes Bos', twitter: '@wesbos', bio: 'Canadian developer'},
+  {name: 'Chris Coyier', twitter: '@chriscoyier', bio: 'CSS Tricks and CodePen'},
+  {name: 'Addy Osmani', twitter: '@addyosmani', bio: 'Googler'},
+];
+
+function getPostById(id) {
+  // create a new promise
+  return new Promise((resolve, reject) => {
+    // using a setTimeout to mimic a database connection
+    setTimeout(() => {
+      // find the post we want
+      const post = posts.find(post => post.id === id);
+      if (post) {
+        resolve(post); // send the post back
+      } else {
+        reject(Error('No post found!'));
+      }
+    }, 2000);
+  });
+};
+
+function hydrateAuthor(post) {
+  // create a new promise
+  return new Promise((resolve, reject) => {
+    // find the author
+    const authorDetails = authors.find(person => person.name === post.author);
+    if (authorDetails) {
+      // "hydrate" the post object with the author object
+      post.author = authorDetails;
+      resolve(post);
+    } else {
+      reject(Error('Cannot find the author!'));
+    }
+  });
+}
+
+getPostById(2)
+  .then(post => {
+    return hydrateAuthor(post);
+  })
+  .then(post => {
+    console.log(post);
+  })
+  .catch(err => {
+    console.error(err);
+  });
+
+```
+
+### Working with Multiple Promises
+
+There are times when we don't need to chain promises in the "waterfall approach" of sorts of the example above. Instead, we need responses sent or fired up all at once, because they don't depend on one another. In those cases, we can work with multiple promises.
+
+The first example below just sends two mock responses: one from a `Promise` containing an object with weather info and the other from a `Promise` containing an array with a couple of tweets. The weather info Promise has a 2000ms timeout, while the tweets `Promise` has a 500ms one. Then, instead of just chaining two `then()`'s, we just resolve a single `Promise`, as shown below:
+
+```javascript
+const weather = new Promise((resolve) => {
+  setTimeout(() => {
+    resolve({ temp: 29, conditions: 'Sunny with clouds' });
+  }, 2000);
+});
+
+const tweets = new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(['I like cake', 'BBQ is good two!']);
+  }, 500);
+});
+
+Promise
+  .all([weather, tweets])
+  .then(responses => {
+    // destructure it
+    const [weatherInfo, tweetsInfo] = responses;
+    console.log(weatherInfo, tweetsInfo);
+  })
+```
+
+The following is another example using real data from a couple of APIs:
+
+
+```javascript
+// fetching data from two different APIs
+const postsPromise = fetch('https://wesbos.com/wp-json/wp/v2/posts');
+const streetCarsPromise = fetch('http://data.ratp.fr/api/datasets/1.0/search/?q=paris');
+
+Promise
+  // pass both initial promises
+  .all([postsPromise, streetCarsPromise])
+  .then(responses => {
+    // map the responses into a JSON array
+    return Promise.all(responses.map(res => res.json()));
+  })
+  .then(responses => {
+    // return the data we need
+    console.log(responses);
+  });
+```
+
+## Symbols
+
+### All About Symbols
+
+JavaScript Symbols are a way to create unique identifiers and avoid "naming collisions". According to the [MDN entry on Symbols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol), their primary purpose is to be used as identifiers for object properties.
+
+The following example shows a possible implementation of Symbols as object properties:
+
+```javascript
+const classRoom = {
+  // two students share the same name, Olivia, but since they're declared as
+  // Symbols, their actual values are unique
+  [Symbol('Mark')]: { grade: 50, gender: 'male' },
+  [Symbol('Olivia')]: { grade: 60, gender: 'female' },
+  [Symbol('Olivia')]: { grade: 45, gender: 'female' }
+}
+
+// the following workaround lets us access the data contained inside Symbols
+
+// create an array out the Symbols contained in the classRoom object
+const syms = Object.getOwnPropertySymbols(classRoom);
+// map the array and access the values of the corresponding Symbols
+const data = syms.map(sym => classRoom[sym]);
+```
