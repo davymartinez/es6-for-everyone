@@ -117,7 +117,7 @@ Three key benefits of arrow functions:
 - They have implicit returns, which allows for one-liners
 - They don't rebind the value of `this`, which is really useful when we embed an arrow function inside of another function
 
-#### Arrow function examples:
+#### Arrow function examples
 
 ```javascript
 const namesArray = ['Herman', 'Lily', 'Eddie', 'Grandpa', 'Marylin'];
@@ -932,8 +932,6 @@ const [name, id, ...runs] = runner;
 
 ## Object Literal Upgrades
 
-### Object Literal Upgrades
-
 In ES6 we can declare object keys without a value if they are the same as variables declared alongside the object. An example makes it, hopefully, clearer.
 
 Suppose we have the following `const` declarations:
@@ -1000,8 +998,6 @@ const modal = {
 Notice that the functions above could have been defined as `create = function(selector){//}`.
 
 ## Promises
-
-### Promises
 
 A good way to visualize the concept of a Promise in JavaScript is "something that will probably happen in the future, but just not immediately."
 
@@ -1151,7 +1147,6 @@ Promise
 
 The following is another example using real data from a couple of APIs:
 
-
 ```javascript
 // fetching data from two different APIs
 const postsPromise = fetch('https://wesbos.com/wp-json/wp/v2/posts');
@@ -1193,4 +1188,100 @@ const classRoom = {
 const syms = Object.getOwnPropertySymbols(classRoom);
 // map the array and access the values of the corresponding Symbols
 const data = syms.map(sym => classRoom[sym]);
+```
+
+## Classes
+
+### Say Hello to Classes
+
+Javascript classes are syntactic sugar used to implement prototypal inheritance in the language. For example, a function declaration with prototype methods such as the following:
+
+```javascript
+function Dog(name, breed) {
+  this.name = name;
+  this.breed = breed;
+};
+
+Dog.prototype.bark = function() {
+  console.log(`Bark! Bark! My name is ${this.name}`);
+};
+
+Dog.prototype.cuddle = function() {
+  console.log(`I love you owner!`);
+};
+
+const snickers = new Dog('Snickers', 'King Charles');
+const sunny = new Dog('Sunny', 'Golden Doodle');
+```
+
+Can be declared with a class as follows (with extra getters and setters):
+
+```javascript
+class Dog {
+  constructor(name, breed) {
+    this.name = name;
+    this.breed = breed;
+  }
+  bark() {
+    console.log(`Bark! Bark! My name is ${this.name}`);
+  }
+  cuddle() {
+    console.log(`I love you owner!`);
+  }
+  static info() {
+    console.log('A dog is 10x better than a cat.');
+  }
+  get description() {
+    return `${this.name} is a ${this.breed} type of dog`;
+  }
+  set nicknames(value) {
+    this.nick = value;
+  }
+  get nicknames() {
+    return this.nick;
+  }
+}
+
+const snickers = new Dog('Snickers', 'King Charles');
+const sunny = new Dog('Sunny', 'Golden Doodle');
+```
+
+### Extending Classes and using super()
+
+We can create more specific classes by using the `extends` keyword. Suppose that, from the previous example, we don't want to create a dog, but a general Animal class, like this:
+
+```javascript
+class Animal {
+  constructor(name) {
+    this.name = name;
+    this.thirst = 100;
+    this.belly = [];
+  }
+  drink() {
+    this.thirst -= 10;
+    return this.thirst;
+  }
+  eat(food) {
+    this.belly.push(food);
+    return this.belly;
+  }
+}
+
+const rhino = new Animal('Rhiney');
+```
+
+We can then extend this Animal class for a dog, which will let us reuse the class' methods as well as add new ones. In this case, we also use the `super()` method which basically calls the properties and methods of the Animal class so we can also use them for our new dog:
+
+```javascript
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);
+    this.breed = breed;
+  }
+  bark() {
+    console.log('Bark! Bark! I\'m a dog!');
+  }
+}
+
+const snickers = new Dog('Snickers', 'King Charles');
 ```
