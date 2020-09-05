@@ -1285,3 +1285,32 @@ class Dog extends Animal {
 
 const snickers = new Dog('Snickers', 'King Charles');
 ```
+
+### Extending Arrays with Classes for Custom Collections
+
+ES6 allows us to extend built-in prototypes so that we can create our own classes with methods that better suit our purposes. Take for example the Array prototype and let's create a custom collection class by extending it, as follows:
+
+```javascript
+class MovieCollection extends Array {
+  // the first item will always be a name, while the rest of them (...items) will be the actual movies
+  constructor(name, ...items) {cd ..
+    super(...items);
+    this.name = name;
+  }
+  add(movie) {
+    this.push(movie);
+  }
+  topRated(limit = 10) {
+    // one-liner sort
+    return this.sort((a, b) => (a.stars > b.stars ? -1 : 1)).slice(0, limit);
+  }
+}
+const movies = new MovieCollection('Dave\'s Faves',
+  { name: 'Shawshank Redemption', stars: 10 },
+  { name: 'Natural Born Killers', stars: 9 },
+  { name: 'The Fall', stars: 8 },
+  { name: 'Metallica: Through the Never', stars: 5 }
+);
+
+movies.add({ name: 'Birdman', stars: 7});
+```
