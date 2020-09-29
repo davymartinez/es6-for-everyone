@@ -1314,3 +1314,117 @@ const movies = new MovieCollection('Dave\'s Faves',
 
 movies.add({ name: 'Birdman', stars: 7});
 ```
+
+## Generators
+
+### Introducing Generators
+
+In ES6, generators can be thought of as functions that we can "start/stop" or "pause" and then call or resume at a later time in our program. They are defined by using the `function*` declaration (notice the asterisk attached to the `function` keyword). They also return values using the keyword `yield`.
+
+From the [MDN entry](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) on `function*`:
+
+> Generators are functions that can be exited and later re-entered. Their context (variable bindings) will be saved across re-entrances.
+>
+> Generators in JavaScript -- especially when combined with Promises -- are a very powerful tool for asynchronous programming as they mitigate -- if not entirely eliminate -- the problems with callbacks, such as Callback Hell and Inversion of Control. However, an even simpler solution to these problems can be achieved with async functions.
+
+To better grasp the idea, consider the following example:
+
+```javascript
+function* listPeople() {
+  yield 'Wes';
+  yield 'Kait';
+  yield 'Snickers';
+}
+// assign this generator function to a people const
+const people = listPeople();
+```
+
+Calling the `people` const will initially yield an object with a `"suspended"` status:
+
+```javascript
+> people
+
+listPeople {[[GeneratorStatus]]: "suspended", [[GeneratorReceiver]]: Window}
+```
+
+In order to yield the actual values, we have to use subsequent calls with `.next()`:
+
+```javascript
+people.next()
+Object {value: "Wes", done: false}
+
+people.next()
+Object {value: "Kait", done: false}
+
+people.next()
+Object {value: "Snickers", done: false}
+
+people.next()
+Object {value: undefined, done: false}
+```
+
+Another example, iterating through an array:
+
+```javascript
+const inventors = [
+  { first: 'Albert', last: 'Einstein', year: 1879 },
+  { first: 'Isaac', last: 'Newton', year: 1643 },
+  { first: 'Galileo', last: 'Galilei', year: 1564 },
+  { first: 'Marie', last: 'Curie', year: 1867 },
+  { first: 'Johannes', last: 'Kepler', year: 1571 },
+  { first: 'Nicolaus', last: 'Copernicus', year: 1473 },
+  { first: 'Max', last: 'Planck', year: 1858 },
+];
+
+// a generator function that loops through the above array
+function* loop(arr) {
+  console.log(inventors);
+  for (const item of arr) {
+    yield item;
+  }
+}
+
+const inventorGen = loop(inventors);
+
+// in order to get the values and not the whole object, we can use .next().value
+inventorGen.next().value
+Object {first: "Albert", last: "Einstein", year: 1879}
+
+//...
+
+inventorGen.next().value
+Object {first: "Max", last: "Planck", year: 1858}
+
+inventorGen.next().value
+undefined
+
+```
+
+### Using Generators for Ajax Flow Control
+
+A use case for generators involve waterfalling Ajax requests, that is, retrieving data from successive requests while avoiding issues such as "callback hell", since no requests are being nested into each other.
+
+The following example makes three Ajax requests to three different APIs. For the example's sake, let's assume these three calls rely on each other, that is, each call depends on the previous one being completed and the data returned.
+
+```javascript
+function ajax(url) {
+  fetch(url).then(data => data.json()).then(data => dataGen.next(data));
+}
+
+function* steps() {
+  console.log('fetching beers');
+  const beers = yield ajax('https://api.react.beer/v2/search?q=hops&type=beer'); // yield whatever the result of ajax()
+  console.log(beers);
+  
+  console.log('fetching davy');
+  const davy = yield ajax('https://api.github.com/users/davymartinez'); // this one will only run once we get the results of the previous one
+  console.log(davy);
+  
+  console.log('fetching fat joe');
+  const fatJoe = yield ajax('https://api.discogs.com/artists/51988'); // ditto
+  console.log(fatJoe);
+}
+
+const dataGen = steps();
+dataGen.next(); // kick it off
+```
