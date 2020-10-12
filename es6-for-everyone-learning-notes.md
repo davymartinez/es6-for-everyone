@@ -1428,3 +1428,37 @@ function* steps() {
 const dataGen = steps();
 dataGen.next(); // kick it off
 ```
+
+### Looping Generators with for...of
+
+We can loop through a generator containing several yield statements with a for...of instead of calling each statement with a different `.next()` method.
+
+```javascript
+function* lyrics() {
+  yield `I've powered up, get my program set`;
+  yield `And turn my head toward the sun`;
+  yield `Inside I know, I'm not a void`;
+  yield `I'm automaton`;
+}
+
+const automaton = lyrics();
+
+for (const line of automaton) {
+  console.log(line);
+}
+```
+
+The above example logs each line of the lyrics one line at a time.
+
+## Proxies
+
+### What are Proxies?
+
+Proxies allows us to override the default behavior of operations on objects. From [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy):
+
+> The `Proxy` object enables you to create a proxy for another object, which can intercept and redefine fundamental operations for that object.
+> [...]
+> A Proxy is created with two parameters:
+>
+> - target: the original object which you want to proxy
+> - handler: an object that defines which operations will be intercepted and how to redefine intercepted operations.
