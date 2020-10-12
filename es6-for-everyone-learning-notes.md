@@ -1454,7 +1454,7 @@ The above example logs each line of the lyrics one line at a time.
 
 ### What are Proxies?
 
-Proxies allows us to override the default behavior of operations on objects. From [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy):
+Proxies allows us to intercept, override, and/or determine the behavior of the operations of an object. From [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy):
 
 > The `Proxy` object enables you to create a proxy for another object, which can intercept and redefine fundamental operations for that object.
 > [...]
@@ -1462,3 +1462,101 @@ Proxies allows us to override the default behavior of operations on objects. Fro
 >
 > - target: the original object which you want to proxy
 > - handler: an object that defines which operations will be intercepted and how to redefine intercepted operations.
+
+Also, from [Javascript Tutorial](https://www.javascripttutorial.net/es6/javascript-proxy/), we have:
+
+> A JavaScript Proxy is an object that wraps another object (target) and intercepts the fundamental operations of the target object.
+>  
+> The fundamental operations can be the property lookup, assignment, enumeration, and function invocations, etc.
+
+The following example takes a `user` object and accesses its properties through a `proxyUser` object:
+
+```javascript
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  email: 'john.doe@example.com',
+};
+
+const handler = {
+  get(target, property) { // here, target is the user object above
+    console.log(`Property $(property) has been read.`);
+    return target[property];
+  }
+};
+
+const proxyUser = new Proxy(user, handler);
+
+console.log(proxyUser.firstName);
+// Property firstName has been read.
+// John
+console.log(proxyUser.lastName);
+// Property lastName has been read.
+// Doe
+```
+
+### Proxy Traps
+
+Handler functions are commonly referred to as "traps", since they intercept, or trap, calls to the target object. `get()` traps are used to access properties of the `target` object, while `set()` traps control the setting of properties of said object. Another frequently used one is the `apply()` trap, which is used for function calls.
+
+#### get() Trap Example
+
+Here, we get the `firstName` and `lastName` properties to create a new one, `fullName`:
+
+```javascript
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+}
+
+const handler = {
+  get(target, property) {
+    return property === 'fullName' ?
+      `${target.firstName} ${target.lastName}` :
+      target[property];
+  }
+};
+
+const proxyUser = new Proxy(user, handler);
+
+console.log(proxyUser.fullName);
+
+// John Doe
+```
+
+#### set() Trap Example
+
+`set()` traps are useful for validating property values, like this:
+
+```javascript
+const user = {
+  firstName: 'John',
+  lastName: 'Doe',
+  age: 20,
+}
+
+const handler = {
+  set(target, property, value) {
+    if (property === 'age') {
+      if (typeof value !== 'number') {
+        throw new Error('Age must be a number.');
+      }
+      if (value < 18) {
+        throw new Error('The user must be 18 or older.');
+      }
+    }
+    target[property] = value;
+  }
+};
+
+const proxyUser = new Proxy(user, handler);
+
+proxyUser.age = 'foo';
+// Error: Age must be a number.
+
+proxyUser.age = 16;
+// Error: The user must be 18 or older.
+
+proxyUser.age = 21;
+// (No error occurs)
+```
