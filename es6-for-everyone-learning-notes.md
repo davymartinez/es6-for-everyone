@@ -1560,3 +1560,43 @@ proxyUser.age = 16;
 proxyUser.age = 21;
 // (No error occurs)
 ```
+
+## Sets and WeakSets
+
+### Sets
+
+Sets in ES6 are like lists of items where we can add, delete and loop over. Every item in a Set is unique: it can only be added once. They're similar to arrays in a way, but are not index-based. Sets have their own API and methods, as we'll see below:
+
+```javascript
+const people = new Set();
+people.add('Abe');
+people.add('Beth');
+people.add('Carl');
+
+// > people
+// > Set {"Abe", "Beth", "Carl"}
+```
+
+Sets have the `size` property (as in `people.size`), which lets us check the number of values inside the Set (not its length, as they're not zero-based).
+
+Some useful methods of Sets are:
+
+- `delete(value)`: removes the element associated to the "value"--in the example above it would be, for example, `people.delete('Carl')` (returns `true` if the elements was found and effectively deleted, otherwise it returns `false`)
+- `clear()`: deletes everything inside the Set
+- `values()`: returns an iterator object which allows us to iterate over the Set, like we do with Generators (see above)
+- `keys()`: same as `values()`, returns an iterator
+- `entries()`: also returns an iterator but containing an array of `[value, value]`
+- `has(value)`: returns a boolean asserting if a Set has, or not, a given element
+
+### WeakSets
+
+WeakSets are collections of objects, that is, they're like Sets, but only for objects. Also, as with Sets, the elements inside a WeakSet are unique, occurring only once. Another important distinction is that WeakSets are not enumerable, they can't be looped over.
+
+```javascript
+let album1 = { title: '...And Justice for All', year: 1988 };
+let album2 = { title: 'Death Magnetic', year: 2008 };
+
+const albums = new WeakSet([album1, album2]);
+```
+
+WeakSets methods are `add(value)`, `delete(value)` and `has(value)`, all similar in function to the equally named methods of Sets, as described above.
