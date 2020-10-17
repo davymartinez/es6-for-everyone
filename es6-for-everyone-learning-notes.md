@@ -1600,3 +1600,97 @@ const albums = new WeakSet([album1, album2]);
 ```
 
 WeakSets methods are `add(value)`, `delete(value)` and `has(value)`, all similar in function to the equally named methods of Sets, as described above.
+
+## Map and WeakMap
+
+### Maps
+
+Maps are to objects as Sets are to arrays. The [definition from MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) says:
+
+> The Map object holds key-value pairs and remembers the original insertion order of the keys. Any value (both objects and primitive values) may be used as either a key or a value.
+
+We can iterate through Maps using `forEach` or `for...Hugoas follows10
+
+```javascript
+const dogs = new Map();
+
+dogs.set('Snickers', 3);
+dogs.set('Sunny', 2);
+dogs.set('Hugo', 10);
+
+dogs.forEach((val, key) => console.log(val, key));
+
+// 3 "Snickers"
+// 2 "Sunny"
+// 10 "Hugo"
+
+for (const dog of dogs) {
+  console.log(dog);
+}
+
+// ["Snickers", 3]
+// ["Sunny", 2]
+// ["Hugo", 10]
+```
+
+The last example can also be destructured so we can log each key-value pair as individual variables:
+
+```javascript
+for (const [key, val] of dogs) {
+  console.log(key, val);
+}
+
+// Snickers 3
+// Sunny 2
+// Hugo 10
+```
+
+### Map Metadata with DOM Node Keys
+
+Maps are useful to implement "metadata dictionaries", that is, objects where we can store and manipulate data about other objects, without affecting the objects themselves. That is metadata: information about information, or data about data.
+
+The following example keeps a count of how many times certain buttons on a webpage have been clicked:
+
+```html
+<html>
+  <body>
+    <button>Snakes 🐍</button>
+    <button>Cry 😭</button>
+    <button>Ice Cream 🍦</button>
+    <button>Flamin' 🔥</button>
+    <button>Dancer 🕺</button>
+  </body>
+  <script>
+    const clickCounts = new Map();
+    const buttons = document.querySelectorAll('button');
+
+    buttons.forEach(button => {
+      clickCounts.set(button, 0);
+      button.addEventListener('click', function() {
+        const val = clickCounts.get(this);
+        clickCounts.set(this, val + 1);
+        console.log(clickCounts);
+      });
+    });
+  </script>
+</html>
+
+// Map {button {} => 1, button {} => 0, button {} => 0, button {} => 0, button {} => 0}
+
+```
+
+Every time we click on a button, the `clickCounts` variable increments by one and logs it to console inside a `Map` object (the example above shows one click of the "Snakes 🐍" button).
+
+### WeakMaps
+
+Just like WeakSets, WeakMaps do not have a size and are not enumerable. Also, items inside a WeakMap get garbage-collected when no longer in use in any other part of the application.
+
+From [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Keyed_collections#WeakMap_object):
+
+> The WeakMap object is a collection of key/value pairs in which the keys are objects only and the values can be arbitrary values. The object references in the keys are held weakly, meaning that they are a target of garbage collection (GC) if there is no other reference to the object anymore. The WeakMap API is the same as the Map API.
+>
+> One difference to Map objects is that WeakMap keys are not enumerable (i.e., there is no method giving you a list of the keys). If they were, the list would depend on the state of garbage collection, introducing non-determinism.
+>
+> [...]
+>
+>One use case of WeakMap objects is to store private data for an object, or to hide implementation details.
