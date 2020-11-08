@@ -1842,3 +1842,38 @@ async function getData(names) {
 
 getData(['wesbos', 'davymartinez', 'darcyclarke']);
 ```
+
+### Promisifying Callback Based Functions
+
+Whenever we have a callback based function, we can "promisify" it, that is, we can turn it into a promise based one by wrapping the function's logic into a `Promise()` and then calling it from an `async` function.
+
+The example below shows a regular callback function that returns our geolocated position in coordinates:
+
+```javascript
+navigator.geolocation.getCurrentPosition(function pos() {
+  console.log('it worked!');
+  console.log(pos);
+}, function err() {
+  console.log('it failed!');
+  console.log(err);
+});
+```
+
+Promisifying it:
+
+```javascript
+function getCurrentPosition(...args) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(...args, resolve, reject);
+  });
+}
+
+async function go() {
+  console.log('starting');
+  const pos = await getCurrentPosition();
+  console.log(pos);
+  console.log('finished');
+}
+
+go();
+```
