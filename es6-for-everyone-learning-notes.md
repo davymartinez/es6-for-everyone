@@ -1694,3 +1694,151 @@ From [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Keyed_c
 > [...]
 >
 >One use case of WeakMap objects is to store private data for an object, or to hide implementation details.
+
+## Async + Await Flow Control
+
+### All About Async Await
+
+With `async` + `await` we can call an asynchronous function and then, inside that function, we await for values. By using `async` + `await` we can avoid the need to configure promise chains.
+
+In the context of JS, an asynchronous function executes its operations or tasks while other instructions are being called or run, as opposed to the regular synchronous mode of execution where every task waits for the previous one to finish before the task runs. In other words, `async` functions run in parallel to other functions.
+
+The `async` keyword before a function makes the function return a promise, whereas `await` makes the function wait for a promise. Also, `await` cannot be "out in the open"--it must always be inside the scope of an `async` function.
+
+The following code example shows a way of implementing `async` + `await` with a `setTimeout()` function:
+
+```javascript
+function breathe(amount) {
+  return new Promise((resolve, reject) => {
+    if (amount < 500) {
+      reject('That is too small of a value');
+    };
+    setTimeout(() => resolve(`Done for ${amount} ms`), amount);
+  });
+}
+
+async function go() {
+  console.log('start');
+  const res = await breathe(1000);
+  console.log(res);
+  const res2 = await breathe(600);
+  console.log(res2);
+  const res3 = await breathe(750);
+  console.log(res3);
+  const res4 = await breathe(900);
+  console.log(res4);
+}
+```
+
+### Async + Await Error Handling
+
+The way error handling works with `async` + `await` is by simply wrapping our code in a `try...catch` block which will in turn catch the `reject()` of our promise. In that sense, the code from the previous example would look as follows:
+
+```javascript
+function breathe(amount) {
+  return new Promise((resolve, reject) => {
+    if (amount < 500) {
+      reject('That is too small of a value');
+    };
+    setTimeout(() => resolve(`Done for ${amount} ms`), amount);
+  });
+}
+
+async function go() {
+  try {
+    console.log('start');
+    const res = await breathe(1000);
+    console.log(res);
+    const res2 = await breathe(600);
+    console.log(res2);
+    const res3 = await breathe(750);
+    console.log(res3);
+    const res4 = await breathe(900);
+    console.log(res4);
+  } catch(err) {
+    console.log(err);
+  }
+}
+```
+
+One other way of approaching this error handling here is by using a higher order function (HOF), that is, a function that operates on other functions, either as arguments or by returning them. Thus, we could add a `catchErrors()` HOF to our example code above and implement it as follows:
+
+```javascript
+function breathe(amount) {
+  return new Promise((resolve, reject) => {
+    if (amount < 500) {
+      reject('That is too small of a value');
+    };
+    setTimeout(() => resolve(`Done for ${amount} ms`), amount);
+  });
+}
+
+// the fn argument is a function
+function catchErrors(fn) {
+  return function() {
+    return fn().catch((err) => {
+      console.error(err);
+    })
+  }
+}
+
+async function go() {
+  console.log('start');
+  const res = await breathe(1000);
+  console.log(res);
+  const res2 = await breathe(600);
+  console.log(res2);
+  const res3 = await breathe(750);
+  console.log(res3);
+  const res4 = await breathe(900);
+  console.log(res4);
+}
+
+// go() becomes our passed argument to catchErrors()
+const wrappedFunction = catchErrors(go);
+```
+
+### Waiting on Multiple Promises
+
+Sometimes we need to fetch several different resources and return them together later on, after other tasks have been completed. In those cases we can use `Promise.all()`, which is a single `Promise` that returns an array of the results of the different fetches. The code below exemplifies that, as we run two fetches, assigning them to two different variables and then returning a single `Promise` containing the results inside an array:
+
+```javascript
+async function go() {
+  const p1 = fetch('https://api.github.com/users/wesbos').then(r => r.json());
+  const p2 = fetch('https://api.github.com/users/davymartinez').then(r => r.json());
+  // wait for both of them to come back
+  const res = await Promise.all([p1, p2]);
+  console.log(res);
+}
+
+go();
+```
+
+Another way of dealing with this, without `then()`'s is by taking the array of promises and map over it:
+
+```javascript
+async function go() {
+  const p1 = fetch('https://api.github.com/users/wesbos').then(r => r.json());
+  const p2 = fetch('https://api.github.com/users/davymartinez').then(r => r.json());
+  // wait for both of them to come back
+  const res = await Promise.all([p1, p2]);
+  const dataPromises = res.map(r => r.json());
+  // destructure the array
+  const [wes, davy] = await Promise.all(dataPromises);
+  console.log(wes, davy);
+}
+
+go();
+```
+
+Yet another approach, more useful for dealing with a varying amount of fetches, is by passing an array of values to be fetched and then mapping over it at once:
+
+```javascript
+async function getData(names) {
+  const promises = names.map(name => fetch(`https://api.github.com/users/${name}`).then(r => r.json()));
+  const people = await Promise.all(promises);
+  console.log(people);
+}
+
+getData(['wesbos', 'davymartinez', 'darcyclarke']);
+```
