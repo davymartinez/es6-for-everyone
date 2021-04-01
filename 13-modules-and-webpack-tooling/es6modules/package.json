@@ -17,6 +17,7 @@
     "jsonp": "^0.2.1",
     "lodash": "^4.17.19",
     "slug": "^2.1.1",
+    "ssri": ">=8.0.1",
     "webpack-cli": "^3.3.11"
   },
   "devDependencies": {
