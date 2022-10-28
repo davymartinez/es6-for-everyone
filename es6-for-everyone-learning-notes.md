@@ -1,5 +1,76 @@
 # Wes Bos' ES6 for Everyone learning notes
 
+- [Wes Bos' ES6 for Everyone learning notes](#wes-bos-es6-for-everyone-learning-notes)
+  - [New Variables](#new-variables)
+    - [var Scoping Refresher](#var-scoping-refresher)
+    - [let Vs const](#let-vs-const)
+    - [let and const in the Real World](#let-and-const-in-the-real-world)
+    - [Temporal Dead Zone](#temporal-dead-zone)
+    - [Is var Dead? What Should I Use?](#is-var-dead-what-should-i-use)
+  - [Function Improvements: Arrows and Default Arguments](#function-improvements-arrows-and-default-arguments)
+    - [Arrow Functions Introduction](#arrow-functions-introduction)
+      - [Arrow function examples](#arrow-function-examples)
+    - [More Arrow Function Examples](#more-arrow-function-examples)
+    - [Arrow Functions and `this`](#arrow-functions-and-this)
+    - [Default Function Arguments](#default-function-arguments)
+    - [When NOT to Use an Arrow Function](#when-not-to-use-an-arrow-function)
+  - [Template Strings](#template-strings)
+    - [Creating HTML Fragments with Template Literals](#creating-html-fragments-with-template-literals)
+    - [Tagged Template Literals](#tagged-template-literals)
+    - [Sanitizing User Data with Tagged Templates](#sanitizing-user-data-with-tagged-templates)
+  - [Additional String Improvements](#additional-string-improvements)
+    - [New String Methods](#new-string-methods)
+  - [Destructuring](#destructuring)
+    - [Destructuring Objects](#destructuring-objects)
+    - [Destructuring Arrays](#destructuring-arrays)
+    - [Swapping Variables with Destructuring Arrays](#swapping-variables-with-destructuring-arrays)
+    - [Destructuring Functions - Multiple returns and named defaults](#destructuring-functions---multiple-returns-and-named-defaults)
+  - [Iterables and Looping](#iterables-and-looping)
+    - [The for...of Loop](#the-forof-loop)
+    - [The for...of loop in Action](#the-forof-loop-in-action)
+    - [Using for...of with Objects](#using-forof-with-objects)
+  - [An Array of Array Improvements](#an-array-of-array-improvements)
+    - [Array.from() and Array.of()](#arrayfrom-and-arrayof)
+    - [Array.find() and .findIndex()](#arrayfind-and-findindex)
+    - [Array.some() and .every()](#arraysome-and-every)
+  - [Say Hello to ...Spread and ...Rest](#say-hello-to-spread-and-rest)
+    - [Spread Operator Introduction](#spread-operator-introduction)
+    - [More Spread Examples](#more-spread-examples)
+    - [Spreading into a Function](#spreading-into-a-function)
+    - [The ...rest Param in Functions and Destructuring](#the-rest-param-in-functions-and-destructuring)
+  - [Object Literal Upgrades](#object-literal-upgrades)
+  - [Promises](#promises)
+    - [Building your own Promises](#building-your-own-promises)
+    - [Chaining Promises and Flow Control](#chaining-promises-and-flow-control)
+    - [Working with Multiple Promises](#working-with-multiple-promises)
+  - [Symbols](#symbols)
+    - [All About Symbols](#all-about-symbols)
+  - [Classes](#classes)
+    - [Say Hello to Classes](#say-hello-to-classes)
+    - [Extending Classes and using super()](#extending-classes-and-using-super)
+    - [Extending Arrays with Classes for Custom Collections](#extending-arrays-with-classes-for-custom-collections)
+  - [Generators](#generators)
+    - [Introducing Generators](#introducing-generators)
+    - [Using Generators for Ajax Flow Control](#using-generators-for-ajax-flow-control)
+    - [Looping Generators with for...of](#looping-generators-with-forof)
+  - [Proxies](#proxies)
+    - [What are Proxies?](#what-are-proxies)
+    - [Proxy Traps](#proxy-traps)
+      - [get() Trap Example](#get-trap-example)
+      - [set() Trap Example](#set-trap-example)
+  - [Sets and WeakSets](#sets-and-weaksets)
+    - [Sets](#sets)
+    - [WeakSets](#weaksets)
+  - [Map and WeakMap](#map-and-weakmap)
+    - [Maps](#maps)
+    - [Map Metadata with DOM Node Keys](#map-metadata-with-dom-node-keys)
+    - [WeakMaps](#weakmaps)
+  - [Async + Await Flow Control](#async--await-flow-control)
+    - [All About Async Await](#all-about-async-await)
+    - [Async + Await Error Handling](#async--await-error-handling)
+    - [Waiting on Multiple Promises](#waiting-on-multiple-promises)
+    - [Promisifying Callback Based Functions](#promisifying-callback-based-functions)
+
 This is a collection of my key takeaways on the excellent "ES6 for Everyone" course by Wes Bos, available at [ES6.io](https://es6.io).
 
 ## New Variables
@@ -206,7 +277,7 @@ function calculateBill(total, tax=0.13, tip=0.15) {
   return total + (total * tax) + (total * tip);
 }
 
-const totalBill = (100);
+const totalBill = calculateBill(100);
 
 // returns 128
 ```
@@ -216,7 +287,7 @@ In the above function, both `tax` and `tip` get default values of `0.13` and `0.
 Notice we can still pass other values to `tax` and `tip`, which will override the default values. We can also pass `undefined` to any one of the values if we're passing two other values, as in:
 
 ```javascript
-const totalBill = (100, undefined, 0.10);
+const totalBill = calculateBill(100, undefined, 0.10);
 
 // returns 110
 ```
