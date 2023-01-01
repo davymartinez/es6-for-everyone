@@ -18,9 +18,9 @@
     "lodash": "^4.17.21",
     "slug": "^2.1.1",
     "ssri": ">=8.0.1",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^5.0.1"
   },
   "devDependencies": {
-    "webpack": "^4.42.1"
+    "webpack": "^5.75.0"
   }
 }
